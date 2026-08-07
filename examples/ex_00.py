@@ -1,7 +1,9 @@
+import os
+
 from sqlalchemy import create_engine
 
 engine = create_engine( #Factory : uma fábrica de engines
-    'sqlite:///database.db'
+    str(os.getenv('DB_PATH'))
 )
 
 print(engine)
