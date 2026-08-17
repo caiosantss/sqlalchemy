@@ -1,11 +1,12 @@
 import os
 
-from sqlalchemy import Column, Integer, String, create_engine, delete, select
-from sqlalchemy.orm import DeclarativeBase, Session
+from sqlalchemy import Column, Integer, String, create_engine, delete, select, Engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 
-engine = create_engine(str(os.getenv('DB_PATH')), echo=True)
-
+engine: Engine = create_engine(str(os.getenv('DB_PATH')), echo=True)
+#Factory of session
+Session = sessionmaker(bind=engine)
 
 class Base(DeclarativeBase):
     ...
@@ -21,7 +22,7 @@ class User(Base):
 
 Base.metadata.create_all(engine)
 
-with Session(engine) as s:
+with Session() as s:
     result = s.scalar(
         select(User)
         .where(User.id == 1)
